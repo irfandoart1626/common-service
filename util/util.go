@@ -1,0 +1,84 @@
+package util
+
+import (
+	"cicd-gitlab-ee.telkomsel.co.id/phincon-go/common-service/log"
+	"fmt"
+	"github.com/rs/zerolog"
+	"github.com/spf13/viper"
+	"os"
+	"path/filepath"
+	"strings"
+)
+
+var vips *viper.Viper = &viper.Viper{}
+
+func GetEnv(key string) string {
+	if value := vips.GetString(key); value != "" {
+		return value
+	}
+	panic(fmt.Errorf("config %s not found", key))
+}
+
+func init() {
+	configname := os.Getenv("GO_PROFILE")
+
+	if strings.EqualFold(configname, "") {
+		configname = "default"
+	}
+
+	// Get the current working directory
+	currentDir, err := os.Getwd()
+	if err != nil {
+		fmt.Printf("Error getting current working directory: %v\n", err)
+		return
+	}
+
+	// Search for the "resources" folder recursively starting from the current directory
+	resourcesPath := findResourcesFolder(currentDir)
+
+	viper.AddConfigPath(resourcesPath)
+
+	viper.SetConfigType("properties")
+	viper.SetConfigName(configname)
+
+	vips = viper.GetViper()
+
+	vips.WatchConfig()
+	err = viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error %w", err))
+	}
+
+	vips = viper.GetViper()
+
+	InitConfig(vips)
+}
+
+func findResourcesFolder(dir string) string {
+	for dir != "" {
+
+		resourcesPath := filepath.Join(dir, "config")
+
+		_, err := os.Stat(resourcesPath)
+		if err == nil {
+			return resourcesPath
+		}
+
+		// this will substring the last path
+		parentDir := filepath.Dir(dir)
+
+		// if root directory already reaced
+		if parentDir == dir {
+			break
+		}
+		dir = parentDir
+	}
+	return "" // "resources" folder not found
+}
+
+func InitConfig(vipers *viper.Viper) {
+	zerolog.SetGlobalLevel(log.GetLevel(GetEnv("LOG_LEVEL")))
+	zerolog.TimestampFieldName = ""
+	devDebugMode := GetEnv("DEV_DEBUG_MODE")
+	log.SetupLogger(devDebugMode == "true")
+}
