@@ -125,16 +125,17 @@ func SetLoggerCtxValLogInfo(ctx context.Context, logInfo EndInfo) {
 	l := GetLoggerCtx(ctx)
 	l.UpdateContext(func(c zerolog.Context) zerolog.Context {
 		log := map[string]interface{}{
-			"transactionID":   logInfo.TransactionID,
-			"logTimestamp":    logInfo.LogTimestamp,
-			"serviceID":       logInfo.ServiceID,
-			"channelID":       logInfo.ChannelID,
-			"apiID":           logInfo.ApiID,
-			"logLevel":        logInfo.LogLevel,
-			"logPoint":        logInfo.LogPoint,
-			"logMessage":      logInfo.LogMessage,
-			"requestPayload":  logInfo.RequestPayload,
-			"responsePayload": logInfo.ResponsePayload,
+			"transactionID":         logInfo.TransactionID,
+			"internalTransactionID": logInfo.InternalTransactionID,
+			"logTimestamp":          logInfo.LogTimestamp,
+			"serviceID":             logInfo.ServiceID,
+			"channelID":             logInfo.ChannelID,
+			"apiID":                 logInfo.ApiID,
+			"logLevel":              logInfo.LogLevel,
+			"logPoint":              logInfo.LogPoint,
+			"logMessage":            logInfo.LogMessage,
+			"requestPayload":        logInfo.RequestPayload,
+			"responsePayload":       logInfo.ResponsePayload,
 		}
 		return c.Fields(log)
 	})
@@ -182,6 +183,7 @@ func LogTrace(EndInfo EndInfo) {
 		e.Interface("responsePayload", EndInfo.ResponsePayload)
 		e.Interface("serviceID", EndInfo.ServiceID)
 		e.Interface("transactionID", EndInfo.TransactionID)
+		e.Interface("internalTransactionID", EndInfo.InternalTransactionID)
 		e.Interface("processTime", EndInfo.ProcessTime)
 		e.Msg(EndInfo.LogPoint)
 	}
@@ -201,6 +203,7 @@ func LogInfo(EndInfo EndInfo) {
 		i.Interface("responsePayload", EndInfo.ResponsePayload)
 		i.Interface("serviceID", EndInfo.ServiceID)
 		i.Interface("transactionID", EndInfo.TransactionID)
+		i.Interface("internalTransactionID", EndInfo.InternalTransactionID)
 		i.Interface("processTime", EndInfo.ProcessTime)
 		i.Msg(EndInfo.LogPoint)
 	}
@@ -220,6 +223,7 @@ func LogWithoutLvl(EndInfo EndInfo) {
 		i.Interface("responsePayload", EndInfo.ResponsePayload)
 		i.Interface("serviceID", EndInfo.ServiceID)
 		i.Interface("transactionID", EndInfo.TransactionID)
+		i.Interface("internalTransactionID", EndInfo.InternalTransactionID)
 		i.Interface("processTime", EndInfo.ProcessTime)
 		i.Msg("")
 	}
