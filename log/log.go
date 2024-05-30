@@ -23,34 +23,36 @@ type Property struct {
 }
 
 type ExceptionInfo struct {
-	ApiID             string `json:"apiID,omitempty"`
-	ChannelID         string `json:"chanelID,omitempty"`
-	TraceID           string `json:"traceId,omitempty"`
-	ExceptionCategory string `json:"exceptionCategory,omitempty"`
-	ExceptionCode     string `json:"exceptionCode,omitempty"`
-	ExceptionMessage  string `json:"exceptionMessage,omitempty"`
-	ExceptionSeverity string `json:"exceptionSeverity,omitempty"`
-	HttpStatusCode    int    `json:"httpStatusCode,omitempty"`
-	ProcessTime       string `json:"processTime,omitempty"`
-	ServiceID         string `json:"serviceID"`
-	ServiceName       string `json:"serviceName,omitempty"`
-	TimeStamp         string `json:"timeStamp"`
-	TransactionID     string `json:"transactionId"`
+	ApiID                 string `json:"apiID,omitempty"`
+	ChannelID             string `json:"chanelID,omitempty"`
+	TraceID               string `json:"traceId,omitempty"`
+	ExceptionCategory     string `json:"exceptionCategory,omitempty"`
+	ExceptionCode         string `json:"exceptionCode,omitempty"`
+	ExceptionMessage      string `json:"exceptionMessage,omitempty"`
+	ExceptionSeverity     string `json:"exceptionSeverity,omitempty"`
+	HttpStatusCode        int    `json:"httpStatusCode,omitempty"`
+	InternalTransactionID string `json:"internalTransactionID"`
+	ProcessTime           string `json:"processTime,omitempty"`
+	ServiceID             string `json:"serviceID"`
+	ServiceName           string `json:"serviceName,omitempty"`
+	TimeStamp             string `json:"timeStamp"`
+	TransactionID         string `json:"transactionID"`
 }
 
 type EndInfo struct {
-	LogTimestamp    string `json:"logTimestamp"`
-	TransactionID   string `json:"transactionID"`
-	ServiceID       string `json:"serviceID"`
-	ChannelID       string `json:"chanelID,omitempty"`
-	ApiID           string `json:"apiID,omitempty"`
-	LogLevel        string `json:"logLevel"`
-	LogPoint        string `json:"logPoint,omitempty"`
-	LogMessage      string `json:"logMessage,omitempty"`
-	RequestPayload  string `json:"requestPayload,omitempty"`
-	ResponsePayload string `json:"responsePayload,omitempty"`
-	HttpStatusCode  string `json:"httpStatusCode,omitempty"`
-	ProcessTime     string `json:"processTime,omitempty"`
+	LogTimestamp          string `json:"logTimestamp"`
+	InternalTransactionID string `json:"internalTransactionID"`
+	TransactionID         string `json:"transactionID"`
+	ServiceID             string `json:"serviceID"`
+	ChannelID             string `json:"chanelID,omitempty"`
+	ApiID                 string `json:"apiID,omitempty"`
+	LogLevel              string `json:"logLevel"`
+	LogPoint              string `json:"logPoint,omitempty"`
+	LogMessage            string `json:"logMessage,omitempty"`
+	RequestPayload        string `json:"requestPayload,omitempty"`
+	ResponsePayload       string `json:"responsePayload,omitempty"`
+	HttpStatusCode        string `json:"httpStatusCode,omitempty"`
+	ProcessTime           string `json:"processTime,omitempty"`
 }
 
 // add faultdetails object for exception info
