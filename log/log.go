@@ -210,22 +210,30 @@ func LogInfo(EndInfo EndInfo) {
 }
 
 // LogWithoutLvl will print array of key value pair object info in stdout and give new line without key level
-func LogWithoutLvl(EndInfo EndInfo) {
+func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *FaultDetails, payload any) {
 	if i := logger.WithLevel(zerolog.NoLevel); i.Enabled() {
-		i.Interface("apiID", EndInfo.ApiID)
-		i.Interface("channelID", EndInfo.ChannelID)
-		i.Interface("httpStatusCode", EndInfo.HttpStatusCode)
-		i.Interface("logLevel", EndInfo.LogLevel)
-		i.Interface("logMessage", EndInfo.LogMessage)
-		i.Interface("logPoint", EndInfo.LogPoint)
-		i.Interface("logTimestamp", EndInfo.LogTimestamp)
-		i.Interface("requestPayload", EndInfo.RequestPayload)
-		i.Interface("responsePayload", EndInfo.ResponsePayload)
-		i.Interface("serviceID", EndInfo.ServiceID)
-		i.Interface("transactionID", EndInfo.TransactionID)
-		i.Interface("internalTransactionID", EndInfo.InternalTransactionID)
-		i.Interface("processTime", EndInfo.ProcessTime)
-		i.Msg("")
+		if endInfo != nil {
+			i.Interface("apiID", endInfo.ApiID)
+			i.Interface("channelID", endInfo.ChannelID)
+			i.Interface("httpStatusCode", endInfo.HttpStatusCode)
+			i.Interface("logLevel", endInfo.LogLevel)
+			i.Interface("logMessage", endInfo.LogMessage)
+			i.Interface("logPoint", endInfo.LogPoint)
+			i.Interface("logTimestamp", endInfo.LogTimestamp)
+			i.Interface("requestPayload", endInfo.RequestPayload)
+			i.Interface("responsePayload", endInfo.ResponsePayload)
+			i.Interface("serviceID", endInfo.ServiceID)
+			i.Interface("transactionID", endInfo.TransactionID)
+			i.Interface("internalTransactionID", endInfo.InternalTransactionID)
+			i.Interface("processTime", endInfo.ProcessTime)
+			i.Msg("")
+		}
+		if exceptionInfo != nil {
+			i.Interface("ExceptionInfo", exceptionInfo)
+			i.Interface("FaultDetails", details)
+			i.Interface("requestPayload", payload)
+		}
+
 	}
 }
 
