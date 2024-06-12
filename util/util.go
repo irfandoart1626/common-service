@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -81,4 +82,19 @@ func InitConfig(vipers *viper.Viper) {
 	zerolog.TimestampFieldName = ""
 	devDebugMode := GetEnv("DEV_DEBUG_MODE")
 	log.SetupLogger(devDebugMode == "true")
+}
+
+func ValidateMSISDN(msisdn string) bool {
+	// convert to number
+	if _, err := strconv.Atoi(msisdn); err != nil {
+		return false
+	}
+
+	// check msisdn format and length
+	if !strings.HasPrefix(msisdn, "62") || len(msisdn) < 11 ||
+		len(msisdn) > 13 {
+		return false
+	}
+
+	return true
 }
