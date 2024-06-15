@@ -9,6 +9,7 @@ import (
 	"net/http/httputil"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -40,19 +41,20 @@ type ExceptionInfo struct {
 }
 
 type EndInfo struct {
-	LogTimestamp          string `json:"logTimestamp"`
-	InternalTransactionID string `json:"internalTransactionID"`
-	TransactionID         string `json:"transactionID"`
-	ServiceID             string `json:"serviceID"`
-	ChannelID             string `json:"chanelID,omitempty"`
-	ApiID                 string `json:"apiID,omitempty"`
-	LogLevel              string `json:"logLevel"`
-	LogPoint              string `json:"logPoint,omitempty"`
-	LogMessage            string `json:"logMessage,omitempty"`
-	RequestPayload        string `json:"requestPayload,omitempty"`
-	ResponsePayload       string `json:"responsePayload,omitempty"`
-	HttpStatusCode        string `json:"httpStatusCode,omitempty"`
-	ProcessTime           string `json:"processTime,omitempty"`
+	LogTimestamp          time.Time `json:"-"`
+	InternalTransactionID string    `json:"internalTransactionID"`
+	TransactionID         string    `json:"transactionID"`
+	ServiceID             string    `json:"serviceID"`
+	ChannelID             string    `json:"chanelID,omitempty"`
+	ApiID                 string    `json:"apiID,omitempty"`
+	LogLevel              string    `json:"logLevel"`
+	LogPoint              string    `json:"logPoint,omitempty"`
+	LogMessage            string    `json:"logMessage,omitempty"`
+	RequestPayload        string    `json:"requestPayload,omitempty"`
+	ResponsePayload       string    `json:"responsePayload,omitempty"`
+	HttpStatusCode        string    `json:"httpStatusCode,omitempty"`
+	ProcessTime           string    `json:"processTime,omitempty"`
+	Timestamp             string    `json:"logTimestamp"`
 }
 
 // add faultdetails object for exception info
@@ -124,10 +126,11 @@ func SetLoggerCtxValInterface(ctx context.Context, key string, val interface{}) 
 func SetLoggerCtxValLogInfo(ctx context.Context, logInfo EndInfo) {
 	l := GetLoggerCtx(ctx)
 	l.UpdateContext(func(c zerolog.Context) zerolog.Context {
-		log := map[string]interface{}{
+		logInfo.Timestamp = logInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
+		logPrinted := map[string]interface{}{
 			"transactionID":         logInfo.TransactionID,
 			"internalTransactionID": logInfo.InternalTransactionID,
-			"logTimestamp":          logInfo.LogTimestamp,
+			"logTimestamp":          logInfo.Timestamp,
 			"serviceID":             logInfo.ServiceID,
 			"channelID":             logInfo.ChannelID,
 			"apiID":                 logInfo.ApiID,
@@ -137,7 +140,7 @@ func SetLoggerCtxValLogInfo(ctx context.Context, logInfo EndInfo) {
 			"requestPayload":        logInfo.RequestPayload,
 			"responsePayload":       logInfo.ResponsePayload,
 		}
-		return c.Fields(log)
+		return c.Fields(logPrinted)
 	})
 }
 
@@ -172,13 +175,14 @@ func InfofCtx(ctx context.Context, format string, args ...interface{}) {
 // LogTrace will print array of key value pair object info in stdout and give new line
 func LogTrace(EndInfo EndInfo) {
 	if e := logger.Trace(); e.Enabled() {
+		EndInfo.Timestamp = EndInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
 		e.Interface("apiID", EndInfo.ApiID)
 		e.Interface("channelID", EndInfo.ChannelID)
 		e.Interface("httpStatusCode", EndInfo.HttpStatusCode)
 		e.Interface("logLevel", EndInfo.LogLevel)
 		e.Interface("logMessage", EndInfo.LogMessage)
 		e.Interface("logPoint", EndInfo.LogPoint)
-		e.Interface("logTimestamp", EndInfo.LogTimestamp)
+		e.Interface("logTimestamp", EndInfo.Timestamp)
 		e.Interface("requestPayload", EndInfo.RequestPayload)
 		e.Interface("responsePayload", EndInfo.ResponsePayload)
 		e.Interface("serviceID", EndInfo.ServiceID)
@@ -192,13 +196,14 @@ func LogTrace(EndInfo EndInfo) {
 // LogInfo will print array of key value pair object info in stdout and give new line
 func LogInfo(EndInfo EndInfo) {
 	if i := logger.Info(); i.Enabled() {
+		EndInfo.Timestamp = EndInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
 		i.Interface("apiID", EndInfo.ApiID)
 		i.Interface("channelID", EndInfo.ChannelID)
 		i.Interface("httpStatusCode", EndInfo.HttpStatusCode)
 		i.Interface("logLevel", EndInfo.LogLevel)
 		i.Interface("logMessage", EndInfo.LogMessage)
 		i.Interface("logPoint", EndInfo.LogPoint)
-		i.Interface("logTimestamp", EndInfo.LogTimestamp)
+		i.Interface("logTimestamp", EndInfo.Timestamp)
 		i.Interface("requestPayload", EndInfo.RequestPayload)
 		i.Interface("responsePayload", EndInfo.ResponsePayload)
 		i.Interface("serviceID", EndInfo.ServiceID)
@@ -213,13 +218,14 @@ func LogInfo(EndInfo EndInfo) {
 func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *FaultDetails, payload any) {
 	if i := logger.WithLevel(zerolog.NoLevel); i.Enabled() {
 		if endInfo != nil {
+			endInfo.Timestamp = endInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
 			i.Interface("apiID", endInfo.ApiID)
 			i.Interface("channelID", endInfo.ChannelID)
 			i.Interface("httpStatusCode", endInfo.HttpStatusCode)
 			i.Interface("logLevel", endInfo.LogLevel)
 			i.Interface("logMessage", endInfo.LogMessage)
 			i.Interface("logPoint", endInfo.LogPoint)
-			i.Interface("logTimestamp", endInfo.LogTimestamp)
+			i.Interface("logTimestamp", endInfo.Timestamp)
 			i.Interface("requestPayload", endInfo.RequestPayload)
 			i.Interface("responsePayload", endInfo.ResponsePayload)
 			i.Interface("serviceID", endInfo.ServiceID)
