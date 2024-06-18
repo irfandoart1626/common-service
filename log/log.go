@@ -33,6 +33,7 @@ type ExceptionInfo struct {
 	ExceptionSeverity     string `json:"exceptionSeverity,omitempty"`
 	HttpStatusCode        int    `json:"httpStatusCode,omitempty"`
 	InternalTransactionID string `json:"internalTransactionID"`
+	NotificationType      string `json:"notificationType,omitempty"`
 	ProcessTime           string `json:"processTime,omitempty"`
 	ServiceID             string `json:"serviceID"`
 	ServiceName           string `json:"serviceName,omitempty"`
@@ -50,6 +51,7 @@ type EndInfo struct {
 	LogLevel              string    `json:"logLevel"`
 	LogPoint              string    `json:"logPoint,omitempty"`
 	LogMessage            string    `json:"logMessage,omitempty"`
+	NotificationType      string    `json:"notificationType,omitempty"`
 	RequestPayload        string    `json:"requestPayload,omitempty"`
 	ResponsePayload       string    `json:"responsePayload,omitempty"`
 	HttpStatusCode        string    `json:"httpStatusCode,omitempty"`
@@ -137,6 +139,7 @@ func SetLoggerCtxValLogInfo(ctx context.Context, logInfo EndInfo) {
 			"logLevel":              logInfo.LogLevel,
 			"logPoint":              logInfo.LogPoint,
 			"logMessage":            logInfo.LogMessage,
+			"notificationType":      logInfo.NotificationType,
 			"requestPayload":        logInfo.RequestPayload,
 			"responsePayload":       logInfo.ResponsePayload,
 		}
@@ -183,6 +186,7 @@ func LogTrace(EndInfo EndInfo) {
 		e.Interface("logMessage", EndInfo.LogMessage)
 		e.Interface("logPoint", EndInfo.LogPoint)
 		e.Interface("logTimestamp", EndInfo.Timestamp)
+		e.Interface("notificationType", EndInfo.NotificationType)
 		e.Interface("requestPayload", EndInfo.RequestPayload)
 		e.Interface("responsePayload", EndInfo.ResponsePayload)
 		e.Interface("serviceID", EndInfo.ServiceID)
@@ -204,6 +208,7 @@ func LogInfo(EndInfo EndInfo) {
 		i.Interface("logMessage", EndInfo.LogMessage)
 		i.Interface("logPoint", EndInfo.LogPoint)
 		i.Interface("logTimestamp", EndInfo.Timestamp)
+		i.Interface("notificationType", EndInfo.NotificationType)
 		i.Interface("requestPayload", EndInfo.RequestPayload)
 		i.Interface("responsePayload", EndInfo.ResponsePayload)
 		i.Interface("serviceID", EndInfo.ServiceID)
@@ -226,6 +231,7 @@ func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *Faul
 			i.Interface("logMessage", endInfo.LogMessage)
 			i.Interface("logPoint", endInfo.LogPoint)
 			i.Interface("logTimestamp", endInfo.Timestamp)
+			i.Interface("notificationType", endInfo.NotificationType)
 			i.Interface("requestPayload", endInfo.RequestPayload)
 			i.Interface("responsePayload", endInfo.ResponsePayload)
 			i.Interface("serviceID", endInfo.ServiceID)
