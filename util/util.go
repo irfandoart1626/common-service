@@ -2,13 +2,17 @@ package util
 
 import (
 	"cicd-gitlab-ee.telkomsel.co.id/phincon-go/common-service/log"
+	"crypto/rand"
 	"fmt"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
+	"math"
+	"math/big"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var vips *viper.Viper = &viper.Viper{}
@@ -97,4 +101,51 @@ func ValidateMSISDN(msisdn string) bool {
 	}
 
 	return true
+}
+
+// Generate NOIS Transaction ID
+func GenerateTransactionID(trxID string, msisdn string, internalCode string, apiID string) string {
+	if trxID != "" { // not empty string && not nil
+		return trxID
+	}
+
+	varInternalCode := "0"
+	varMSISDNSuffix := ""
+	varAppID := "N001"
+	varTimestamp := strings.Replace(time.Now().Format("060102150405.000"), ".", "", -1)
+
+	if (internalCode) != "" {
+		varInternalCode = internalCode[len(internalCode)-1:]
+	}
+
+	if msisdn != "" { // not empty string && not nil
+		lgt := len(msisdn)
+		if lgt > 4 {
+			varMSISDNSuffix = msisdn[lgt-5:]
+		} else {
+			for i := 0; i < 5-lgt; i++ {
+				varMSISDNSuffix += "0"
+			}
+			varMSISDNSuffix += msisdn
+		}
+	} else {
+		varMSISDNSuffix = generateRandomNumber(5)
+	}
+
+	if (apiID) != "" {
+		varAppID = apiID
+	}
+
+	return varAppID + varTimestamp + varMSISDNSuffix + varInternalCode
+}
+
+func generateRandomNumber(maxDigits uint32) string {
+	bi, err := rand.Int(
+		rand.Reader,
+		big.NewInt(int64(math.Pow(10, float64(maxDigits)))),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return fmt.Sprintf("%0*d", maxDigits, bi)
 }
