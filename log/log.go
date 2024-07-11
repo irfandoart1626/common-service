@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/Dynatrace/OneAgent-SDK-for-Go/sdk"
 	"net/http"
 	"net/http/httputil"
 	"strconv"
@@ -117,6 +118,13 @@ func SetLoggerCtxVal(ctx context.Context, key, val string) {
 func SetLoggerCtxValInterface(ctx context.Context, key string, val interface{}) {
 	l := GetLoggerCtx(ctx)
 	if exceptInfo, ok := val.(ExceptionInfo); ok {
+		// Create OneAgent SDK API instance
+		oneagentsdk := sdk.CreateInstance()
+
+		// Get TraceContextInfo to obtain Trace ID and Span ID of the active Dynatrace PurePath context
+		traceContext := oneagentsdk.GetTraceContextInfo()
+		exceptInfo.TraceID = traceContext.GetTraceId()
+
 		val = exceptInfo
 	}
 	l.UpdateContext(func(c zerolog.Context) zerolog.Context {
@@ -241,6 +249,13 @@ func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *Faul
 			i.Msg("")
 		}
 		if exceptionInfo != nil {
+			// Create OneAgent SDK API instance
+			oneagentsdk := sdk.CreateInstance()
+
+			// Get TraceContextInfo to obtain Trace ID and Span ID of the active Dynatrace PurePath context
+			traceContext := oneagentsdk.GetTraceContextInfo()
+			exceptionInfo.TraceID = traceContext.GetTraceId()
+
 			i.Interface("ExceptionInfo", exceptionInfo)
 			i.Interface("FaultDetails", details)
 			i.Interface("requestPayload", payload)
@@ -281,6 +296,13 @@ func ErrorfCtx(ctx context.Context, format string, args ...interface{}) {
 func LogException(val ExceptionInfo, details FaultDetails, payload string) {
 	if e := logger.Error(); e.Enabled() {
 		logPoint := val.ApiID + "-" + val.ServiceName + "-End"
+
+		// Create OneAgent SDK API instance
+		oneagentsdk := sdk.CreateInstance()
+
+		// Get TraceContextInfo to obtain Trace ID and Span ID of the active Dynatrace PurePath context
+		traceContext := oneagentsdk.GetTraceContextInfo()
+		val.TraceID = traceContext.GetTraceId()
 
 		e.Interface("ExceptionInfo", val)
 		e.Interface("FaultDetails", details)
