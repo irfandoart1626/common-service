@@ -27,7 +27,7 @@ type Property struct {
 type ExceptionInfo struct {
 	ApiID                 string `json:"apiID,omitempty"`
 	ChannelID             string `json:"chanelID,omitempty"`
-	TraceID               string `json:"traceId,omitempty"`
+	TraceID               string `json:"traceID,omitempty"`
 	ExceptionCategory     string `json:"exceptionCategory,omitempty"`
 	ExceptionCode         string `json:"exceptionCode,omitempty"`
 	ExceptionMessage      string `json:"exceptionMessage,omitempty"`
