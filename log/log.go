@@ -12,8 +12,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Dynatrace/OneAgent-SDK-for-Go/sdk"
-
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/valyala/fasthttp"
@@ -305,13 +303,6 @@ func LogException(val ExceptionInfo, details FaultDetails, payload string) {
 		// Get TraceContextInfo to obtain Trace Id and Span Id of the active Dynatrace PurePath context
 		traceContext := oneagentsdk.GetTraceContextInfo()
 		val.TraceId = traceContext.GetTraceId()
-
-		// Create OneAgent SDK API instance
-		oneagentsdk := sdk.CreateInstance()
-
-		// Get TraceContextInfo to obtain Trace ID and Span ID of the active Dynatrace PurePath context
-		traceContext := oneagentsdk.GetTraceContextInfo()
-		val.TraceID = traceContext.GetTraceId()
 
 		e.Interface("ExceptionInfo", val)
 		e.Interface("FaultDetails", details)
