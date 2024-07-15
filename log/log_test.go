@@ -10,27 +10,27 @@ import (
 
 var (
 	logInfo = EndInfo{
-		ApiID:           "Test12345",
+		ApiId:           "Test12345",
 		HttpStatusCode:  "200",
 		LogMessage:      "Test",
 		LogPoint:        "api-test-logpoint",
 		ResponsePayload: "",
-		ServiceID:       "62123456789",
-		TransactionID:   "Trx12345678",
+		ServiceId:       "62123456789",
+		TransactionId:   "Trx12345678",
 	}
 
 	exceptInfo = ExceptionInfo{
-		ApiID:             "Test12345",
-		TraceID:           "000000000000000000000000",
+		ApiId:             "Test12345",
+		TraceId:           "000000000000000000000000",
 		ExceptionCategory: "BUSINESS",
 		ExceptionCode:     "20002",
 		ExceptionMessage:  "Invalid MSISDN",
 		ExceptionSeverity: "1",
 		HttpStatusCode:    400,
 		ProcessTime:       "500",
-		ServiceID:         "62123456789",
+		ServiceId:         "62123456789",
 		ServiceName:       "Test-service",
-		TransactionID:     "Trx123456789",
+		TransactionId:     "Trx123456789",
 	}
 
 	faultdetails = FaultDetails{
