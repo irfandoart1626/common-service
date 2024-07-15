@@ -5,12 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/Dynatrace/OneAgent-SDK-for-Go/sdk"
 	"net/http"
 	"net/http/httputil"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Dynatrace/OneAgent-SDK-for-Go/sdk"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -25,30 +26,30 @@ type Property struct {
 }
 
 type ExceptionInfo struct {
-	ApiID                 string `json:"apiID,omitempty"`
-	ChannelID             string `json:"chanelID,omitempty"`
-	TraceID               string `json:"traceID,omitempty"`
+	ApiId                 string `json:"apiId,omitempty"`
+	ChannelId             string `json:"chanelId,omitempty"`
+	TraceId               string `json:"traceId,omitempty"`
 	ExceptionCategory     string `json:"exceptionCategory,omitempty"`
 	ExceptionCode         string `json:"exceptionCode,omitempty"`
 	ExceptionMessage      string `json:"exceptionMessage,omitempty"`
 	ExceptionSeverity     string `json:"exceptionSeverity,omitempty"`
 	HttpStatusCode        int    `json:"httpStatusCode,omitempty"`
-	InternalTransactionID string `json:"internalTransactionID"`
+	InternalTransactionId string `json:"internalTransactionId"`
 	NotificationType      string `json:"notificationType,omitempty"`
 	ProcessTime           string `json:"processTime,omitempty"`
-	ServiceID             string `json:"serviceID"`
+	ServiceId             string `json:"serviceId"`
 	ServiceName           string `json:"serviceName,omitempty"`
 	TimeStamp             string `json:"timeStamp"`
-	TransactionID         string `json:"transactionID"`
+	TransactionId         string `json:"transactionId"`
 }
 
 type EndInfo struct {
 	LogTimestamp          time.Time `json:"-"`
-	InternalTransactionID string    `json:"internalTransactionID"`
-	TransactionID         string    `json:"transactionID"`
-	ServiceID             string    `json:"serviceID"`
-	ChannelID             string    `json:"chanelID,omitempty"`
-	ApiID                 string    `json:"apiID,omitempty"`
+	InternalTransactionId string    `json:"internalTransactionId"`
+	TransactionId         string    `json:"transactionId"`
+	ServiceId             string    `json:"serviceId"`
+	ChannelId             string    `json:"chanelId,omitempty"`
+	ApiId                 string    `json:"apiId,omitempty"`
 	LogLevel              string    `json:"logLevel"`
 	LogPoint              string    `json:"logPoint,omitempty"`
 	LogMessage            string    `json:"logMessage,omitempty"`
@@ -121,9 +122,9 @@ func SetLoggerCtxValInterface(ctx context.Context, key string, val interface{}) 
 		// Create OneAgent SDK API instance
 		oneagentsdk := sdk.CreateInstance()
 
-		// Get TraceContextInfo to obtain Trace ID and Span ID of the active Dynatrace PurePath context
+		// Get TraceContextInfo to obtain Trace Id and Span Id of the active Dynatrace PurePath context
 		traceContext := oneagentsdk.GetTraceContextInfo()
-		exceptInfo.TraceID = traceContext.GetTraceId()
+		exceptInfo.TraceId = traceContext.GetTraceId()
 
 		val = exceptInfo
 	}
@@ -138,12 +139,12 @@ func SetLoggerCtxValLogInfo(ctx context.Context, logInfo EndInfo) {
 	l.UpdateContext(func(c zerolog.Context) zerolog.Context {
 		logInfo.Timestamp = logInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
 		logPrinted := map[string]interface{}{
-			"transactionID":         logInfo.TransactionID,
-			"internalTransactionID": logInfo.InternalTransactionID,
+			"transactionId":         logInfo.TransactionId,
+			"internalTransactionId": logInfo.InternalTransactionId,
 			"logTimestamp":          logInfo.Timestamp,
-			"serviceID":             logInfo.ServiceID,
-			"channelID":             logInfo.ChannelID,
-			"apiID":                 logInfo.ApiID,
+			"serviceId":             logInfo.ServiceId,
+			"channelId":             logInfo.ChannelId,
+			"apiId":                 logInfo.ApiId,
 			"logLevel":              logInfo.LogLevel,
 			"logPoint":              logInfo.LogPoint,
 			"logMessage":            logInfo.LogMessage,
@@ -187,8 +188,8 @@ func InfofCtx(ctx context.Context, format string, args ...interface{}) {
 func LogTrace(EndInfo EndInfo) {
 	if e := logger.Trace(); e.Enabled() {
 		EndInfo.Timestamp = EndInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
-		e.Interface("apiID", EndInfo.ApiID)
-		e.Interface("channelID", EndInfo.ChannelID)
+		e.Interface("apiId", EndInfo.ApiId)
+		e.Interface("channelId", EndInfo.ChannelId)
 		e.Interface("httpStatusCode", EndInfo.HttpStatusCode)
 		e.Interface("logLevel", EndInfo.LogLevel)
 		e.Interface("logMessage", EndInfo.LogMessage)
@@ -197,9 +198,9 @@ func LogTrace(EndInfo EndInfo) {
 		e.Interface("notificationType", EndInfo.NotificationType)
 		e.Interface("requestPayload", EndInfo.RequestPayload)
 		e.Interface("responsePayload", EndInfo.ResponsePayload)
-		e.Interface("serviceID", EndInfo.ServiceID)
-		e.Interface("transactionID", EndInfo.TransactionID)
-		e.Interface("internalTransactionID", EndInfo.InternalTransactionID)
+		e.Interface("serviceId", EndInfo.ServiceId)
+		e.Interface("transactionId", EndInfo.TransactionId)
+		e.Interface("internalTransactionId", EndInfo.InternalTransactionId)
 		e.Interface("processTime", EndInfo.ProcessTime)
 		e.Msg(EndInfo.LogPoint)
 	}
@@ -209,8 +210,8 @@ func LogTrace(EndInfo EndInfo) {
 func LogInfo(EndInfo EndInfo) {
 	if i := logger.Info(); i.Enabled() {
 		EndInfo.Timestamp = EndInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
-		i.Interface("apiID", EndInfo.ApiID)
-		i.Interface("channelID", EndInfo.ChannelID)
+		i.Interface("apiId", EndInfo.ApiId)
+		i.Interface("channelId", EndInfo.ChannelId)
 		i.Interface("httpStatusCode", EndInfo.HttpStatusCode)
 		i.Interface("logLevel", EndInfo.LogLevel)
 		i.Interface("logMessage", EndInfo.LogMessage)
@@ -219,9 +220,9 @@ func LogInfo(EndInfo EndInfo) {
 		i.Interface("notificationType", EndInfo.NotificationType)
 		i.Interface("requestPayload", EndInfo.RequestPayload)
 		i.Interface("responsePayload", EndInfo.ResponsePayload)
-		i.Interface("serviceID", EndInfo.ServiceID)
-		i.Interface("transactionID", EndInfo.TransactionID)
-		i.Interface("internalTransactionID", EndInfo.InternalTransactionID)
+		i.Interface("serviceId", EndInfo.ServiceId)
+		i.Interface("transactionId", EndInfo.TransactionId)
+		i.Interface("internalTransactionId", EndInfo.InternalTransactionId)
 		i.Interface("processTime", EndInfo.ProcessTime)
 		i.Msg(EndInfo.LogPoint)
 	}
@@ -232,8 +233,8 @@ func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *Faul
 	if i := logger.WithLevel(zerolog.NoLevel); i.Enabled() {
 		if endInfo != nil {
 			endInfo.Timestamp = endInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
-			i.Interface("apiID", endInfo.ApiID)
-			i.Interface("channelID", endInfo.ChannelID)
+			i.Interface("apiId", endInfo.ApiId)
+			i.Interface("channelId", endInfo.ChannelId)
 			i.Interface("httpStatusCode", endInfo.HttpStatusCode)
 			i.Interface("logLevel", endInfo.LogLevel)
 			i.Interface("logMessage", endInfo.LogMessage)
@@ -242,9 +243,9 @@ func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *Faul
 			i.Interface("notificationType", endInfo.NotificationType)
 			i.Interface("requestPayload", endInfo.RequestPayload)
 			i.Interface("responsePayload", endInfo.ResponsePayload)
-			i.Interface("serviceID", endInfo.ServiceID)
-			i.Interface("transactionID", endInfo.TransactionID)
-			i.Interface("internalTransactionID", endInfo.InternalTransactionID)
+			i.Interface("serviceId", endInfo.ServiceId)
+			i.Interface("transactionId", endInfo.TransactionId)
+			i.Interface("internalTransactionId", endInfo.InternalTransactionId)
 			i.Interface("processTime", endInfo.ProcessTime)
 			i.Msg("")
 		}
@@ -252,9 +253,9 @@ func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *Faul
 			// Create OneAgent SDK API instance
 			oneagentsdk := sdk.CreateInstance()
 
-			// Get TraceContextInfo to obtain Trace ID and Span ID of the active Dynatrace PurePath context
+			// Get TraceContextInfo to obtain Trace Id and Span Id of the active Dynatrace PurePath context
 			traceContext := oneagentsdk.GetTraceContextInfo()
-			exceptionInfo.TraceID = traceContext.GetTraceId()
+			exceptionInfo.TraceId = traceContext.GetTraceId()
 
 			i.Interface("ExceptionInfo", exceptionInfo)
 			i.Interface("FaultDetails", details)
@@ -295,14 +296,14 @@ func ErrorfCtx(ctx context.Context, format string, args ...interface{}) {
 // LogException will print error in stderr and give new line
 func LogException(val ExceptionInfo, details FaultDetails, payload string) {
 	if e := logger.Error(); e.Enabled() {
-		logPoint := val.ApiID + "-" + val.ServiceName + "-End"
+		logPoint := val.ApiId + "-" + val.ServiceName + "-End"
 
 		// Create OneAgent SDK API instance
 		oneagentsdk := sdk.CreateInstance()
 
-		// Get TraceContextInfo to obtain Trace ID and Span ID of the active Dynatrace PurePath context
+		// Get TraceContextInfo to obtain Trace Id and Span Id of the active Dynatrace PurePath context
 		traceContext := oneagentsdk.GetTraceContextInfo()
-		val.TraceID = traceContext.GetTraceId()
+		val.TraceId = traceContext.GetTraceId()
 
 		e.Interface("ExceptionInfo", val)
 		e.Interface("FaultDetails", details)
