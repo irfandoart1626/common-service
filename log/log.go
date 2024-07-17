@@ -40,7 +40,7 @@ type ExceptionInfo struct {
 	HttpStatusCode        int    `json:"httpStatusCode,omitempty"`
 	InternalTransactionId string `json:"internalTransactionId"`
 	NotificationType      string `json:"notificationType,omitempty"`
-	ProcessTime           string `json:"processTime,omitempty"`
+	ProcessTime           int    `json:"processTime,omitempty"`
 	ServiceId             string `json:"serviceId"`
 	ServiceName           string `json:"serviceName,omitempty"`
 	TimeStamp             string `json:"timeStamp"`
@@ -59,8 +59,8 @@ type EndInfo struct {
 	NotificationType      string    `json:"notificationType,omitempty"`
 	RequestPayload        string    `json:"requestPayload,omitempty"`
 	ResponsePayload       string    `json:"responsePayload,omitempty"`
-	HttpStatusCode        string    `json:"httpStatusCode,omitempty"`
-	ProcessTime           string    `json:"processTime,omitempty"`
+	HttpStatusCode        int       `json:"httpStatusCode,omitempty"`
+	ProcessTime           int       `json:"processTime,omitempty"`
 	Timestamp             string    `json:"logTimestamp"`
 }
 
