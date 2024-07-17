@@ -209,7 +209,7 @@ func LogTrace(EndInfo EndInfo) {
 		e.Interface("transactionId", EndInfo.TransactionId)
 		e.Interface("internalTransactionId", EndInfo.InternalTransactionId)
 		e.Interface("processTime", EndInfo.ProcessTime)
-		e.Msg(EndInfo.LogPoint)
+		e.Msg("")
 	}
 }
 
@@ -301,8 +301,6 @@ func ErrorfCtx(ctx context.Context, format string, args ...interface{}) {
 // LogException will print error in stderr and give new line
 func LogException(val ExceptionInfo, details FaultDetails, payload string) {
 	if e := logger.Error(); e.Enabled() {
-		logPoint := val.ApiId + "-" + val.ServiceName + "-End"
-
 		// Create OneAgent SDK API instance
 		oneagentsdk := sdk.CreateInstance()
 
@@ -313,7 +311,7 @@ func LogException(val ExceptionInfo, details FaultDetails, payload string) {
 		e.Interface("ExceptionInfo", val)
 		e.Interface("FaultDetails", details)
 		e.Interface("requestPayload", payload)
-		e.Msg(logPoint)
+		e.Msg("")
 	}
 }
 
