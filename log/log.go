@@ -17,7 +17,12 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-var logger = zerolog.New(NewLevelWriter()).With().Logger()
+var logger zerolog.Logger
+
+func init() {
+	zerolog.LevelFieldName = "logLevel"
+	logger = zerolog.New(NewLevelWriter()).With().Logger()
+}
 
 type Property struct {
 	Key   string      `json:"key,omitempty"`
@@ -49,7 +54,6 @@ type EndInfo struct {
 	ServiceId             string    `json:"serviceId"`
 	ChannelId             string    `json:"chanelId,omitempty"`
 	ApiId                 string    `json:"apiId,omitempty"`
-	LogLevel              string    `json:"logLevel"`
 	LogPoint              string    `json:"logPoint,omitempty"`
 	LogMessage            string    `json:"logMessage,omitempty"`
 	NotificationType      string    `json:"notificationType,omitempty"`
@@ -64,6 +68,15 @@ type EndInfo struct {
 type FaultDetails struct {
 	Error      string   `json:"error,omitempty"`
 	StackTrace []string `json:"stackTrace,omitempty"`
+	Trace      Trace    `json:"trace,omitempty"`
+}
+
+type Trace struct {
+	DBTableName     string `json:"dbTableName,omitempty"`
+	RequestPayload  string `json:"requestPayload,omitempty"`
+	ResponsePayload string `json:"responsePayload,omitempty"`
+	Uri             string `json:"uri,omitempty"`
+	SoapOperation   string `json:"soapOperation,omitempty"`
 }
 
 func SetupLogger(devDebugMode bool) {
@@ -137,21 +150,17 @@ func SetLoggerCtxValLogInfo(ctx context.Context, logInfo EndInfo) {
 	l := GetLoggerCtx(ctx)
 	l.UpdateContext(func(c zerolog.Context) zerolog.Context {
 		logInfo.Timestamp = logInfo.LogTimestamp.Format("2006-01-02T15:04:05.000-07:00")
-		logPrinted := map[string]interface{}{
-			"transactionId":         logInfo.TransactionId,
-			"internalTransactionId": logInfo.InternalTransactionId,
-			"logTimestamp":          logInfo.Timestamp,
-			"serviceId":             logInfo.ServiceId,
-			"channelId":             logInfo.ChannelId,
-			"apiId":                 logInfo.ApiId,
-			"logLevel":              logInfo.LogLevel,
-			"logPoint":              logInfo.LogPoint,
-			"logMessage":            logInfo.LogMessage,
-			"notificationType":      logInfo.NotificationType,
-			"requestPayload":        logInfo.RequestPayload,
-			"responsePayload":       logInfo.ResponsePayload,
+
+		jsonData, err := json.Marshal(logInfo)
+
+		// Unmarshal JSON to map[string]interface{}
+		var result map[string]interface{}
+		err = json.Unmarshal(jsonData, &result)
+		if err != nil {
+			panic(err)
 		}
-		return c.Fields(logPrinted)
+
+		return c.Fields(result)
 	})
 }
 
@@ -190,7 +199,6 @@ func LogTrace(EndInfo EndInfo) {
 		e.Interface("apiId", EndInfo.ApiId)
 		e.Interface("channelId", EndInfo.ChannelId)
 		e.Interface("httpStatusCode", EndInfo.HttpStatusCode)
-		e.Interface("logLevel", EndInfo.LogLevel)
 		e.Interface("logMessage", EndInfo.LogMessage)
 		e.Interface("logPoint", EndInfo.LogPoint)
 		e.Interface("logTimestamp", EndInfo.Timestamp)
@@ -212,7 +220,6 @@ func LogInfo(EndInfo EndInfo) {
 		i.Interface("apiId", EndInfo.ApiId)
 		i.Interface("channelId", EndInfo.ChannelId)
 		i.Interface("httpStatusCode", EndInfo.HttpStatusCode)
-		i.Interface("logLevel", EndInfo.LogLevel)
 		i.Interface("logMessage", EndInfo.LogMessage)
 		i.Interface("logPoint", EndInfo.LogPoint)
 		i.Interface("logTimestamp", EndInfo.Timestamp)
@@ -235,7 +242,6 @@ func LogWithoutLvl(endInfo *EndInfo, exceptionInfo *ExceptionInfo, details *Faul
 			i.Interface("apiId", endInfo.ApiId)
 			i.Interface("channelId", endInfo.ChannelId)
 			i.Interface("httpStatusCode", endInfo.HttpStatusCode)
-			i.Interface("logLevel", endInfo.LogLevel)
 			i.Interface("logMessage", endInfo.LogMessage)
 			i.Interface("logPoint", endInfo.LogPoint)
 			i.Interface("logTimestamp", endInfo.Timestamp)
