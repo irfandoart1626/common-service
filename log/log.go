@@ -31,7 +31,7 @@ type Property struct {
 
 type ExceptionInfo struct {
 	ApiId                 string `json:"apiId,omitempty"`
-	ChannelId             string `json:"chanelId,omitempty"`
+	ChannelId             string `json:"channelId,omitempty"`
 	TraceId               string `json:"traceId,omitempty"`
 	ExceptionCategory     string `json:"exceptionCategory,omitempty"`
 	ExceptionCode         string `json:"exceptionCode,omitempty"`
@@ -52,7 +52,7 @@ type EndInfo struct {
 	InternalTransactionId string    `json:"internalTransactionId"`
 	TransactionId         string    `json:"transactionId"`
 	ServiceId             string    `json:"serviceId"`
-	ChannelId             string    `json:"chanelId,omitempty"`
+	ChannelId             string    `json:"channelId,omitempty"`
 	ApiId                 string    `json:"apiId,omitempty"`
 	LogPoint              string    `json:"logPoint,omitempty"`
 	LogMessage            string    `json:"logMessage,omitempty"`
