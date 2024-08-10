@@ -1,11 +1,11 @@
 package util
 
 import (
-	"cicd-gitlab-ee.telkomsel.co.id/phincon-go/common-service/log"
 	"crypto/rand"
 	"fmt"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
+	"gitlab.com/phincon/middleware/rnd/notification-system/nois-go/common-service/log"
 	"math"
 	"math/big"
 	"os"
