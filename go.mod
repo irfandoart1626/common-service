@@ -1,4 +1,4 @@
-module cicd-gitlab-ee.telkomsel.co.id/phincon-go/common-service
+module gitlab.com/phincon/middleware/rnd/notification-system/nois-go/common-service
 
 go 1.22
 
