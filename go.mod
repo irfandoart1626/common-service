@@ -3,6 +3,7 @@ module gitlab.com/phincon/middleware/rnd/notification-system/nois-go/common-serv
 go 1.22
 
 require (
+	github.com/Dynatrace/OneAgent-SDK-for-Go v1.1.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/rs/zerolog v1.33.0
 	github.com/spf13/viper v1.18.2
@@ -11,7 +12,6 @@ require (
 )
 
 require (
-	github.com/Dynatrace/OneAgent-SDK-for-Go v1.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/bytedance/sonic v1.11.6 // indirect
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
