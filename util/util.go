@@ -3,12 +3,6 @@ package util
 import (
 	"crypto/rand"
 	"fmt"
-<<<<<<< HEAD
-	"github.com/rs/zerolog"
-	"github.com/spf13/viper"
-	"gitlab.com/phincon/middleware/rnd/notification-system/nois-go/common-service/log"
-=======
->>>>>>> master
 	"math"
 	"math/big"
 	"os"
@@ -16,7 +10,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 	"gitlab.com/phincon/middleware/rnd/notification-system/nois-go/common-service/log"
