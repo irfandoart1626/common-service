@@ -3,6 +3,9 @@ package util
 import (
 	"crypto/rand"
 	"fmt"
+	"github.com/rs/zerolog"
+	"github.com/spf13/viper"
+	"gitlab.com/irfandoart1626/common-service/log"
 	"math"
 	"math/big"
 	"os"
@@ -10,9 +13,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"github.com/rs/zerolog"
-	"github.com/spf13/viper"
-	"gitlab.com/phincon/middleware/rnd/notification-system/nois-go/common-service/log"
 )
 
 var vips *viper.Viper = &viper.Viper{}
