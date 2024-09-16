@@ -3,9 +3,9 @@ package util
 import (
 	"crypto/rand"
 	"fmt"
+	"github.com/irfandoart1626/common-service/log"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
-	"gitlab.com/irfandoart1626/common-service/log"
 	"math"
 	"math/big"
 	"os"

@@ -1,4 +1,4 @@
-module gitlab.com/irfandoart1626/common-service
+module github.com/irfandoart1626/common-service
 
 go 1.22
 
